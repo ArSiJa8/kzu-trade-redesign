@@ -1,0 +1,15 @@
+:root {
+    /* --- Colors --- */
+    /*Light mode*/
+    --color-bg: hsl(213 94% 80%); /*-------Hier noch denken ob das für karten und hintergrund selbst heller ------*/
+    --color-accent: hsl(217 91% 60%);
+    --color-text: hsl(216 60% 10%);
+    --color-text-light: hsl(222 10% 44%);
+    /*Dark mode*/
+    --color-bg-d: hsl(216 60% 10%);
+    --color-accent-d: hsl(213 94% 80%);
+    --color-text-d: hsl(208 100% 97%);
+    --color-text-light-d: hsl(213 94% 87%);
+    /* --- Fonts --- */
+    --font-family: 'Montserrat', sans-serif;
+}
