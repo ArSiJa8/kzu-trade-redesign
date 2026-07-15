@@ -1,6 +1,16 @@
 # KZU Trade **REDESIGN**
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is a Project to fully rewrite and redesign the KZU Trade Website.
+
+## Navigation
+
+
+
+
+## 🗺️ Roadmap
+<!-- ROADMAP:START -->$
+
+<!-- ROADMAP:END -->
 
 ## Setup
 
