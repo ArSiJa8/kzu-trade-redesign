@@ -1,6 +1,19 @@
 # KZU Trade **REDESIGN**
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is a Project to fully rewrite and redesign the KZU Trade Website.
+
+## Navigation
+- [Roadmap](#roadmap)
+- [Setup](#setup)
+- [Development Server](#development-server)
+- [Production Server](#production)
+
+
+
+## Roadmap
+<!-- ROADMAP:START -->$
+
+<!-- ROADMAP:END -->
 
 ## Setup
 
@@ -8,7 +21,7 @@ Make sure to install dependencies:
 
 ```bash
 # npm
-npm install
+npm install <--- all Packages in the package-lock.json are already with npm, so its recommended to use npm :).
 
 # pnpm
 pnpm install
@@ -71,5 +84,3 @@ yarn preview
 # bun
 bun run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

@@ -1,0 +1,51 @@
+name: Sync Issue to README
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  sync:
+    # Ersetze die '12' mit deiner Issue-Nummer!
+    if: github.event.issue.number == 3
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Issue Body
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue view ${{ github.event.issue.number }} --json body --jq .body > issue_body.md
+
+      - name: Update README
+        run: |
+          python -c "
+          with open('README.md', 'r') as f:
+              readme = f.read()
+          with open('issue_body.md', 'r') as f:
+              body = f.read()
+          
+          start_tag = ''
+          end_tag = ''
+          
+          if start_tag in readme and end_tag in readme:
+              parts = readme.split(start_tag)
+              head = parts[0]
+              tail = parts[1].split(end_tag)[1]
+              new_readme = f'{head}{start_tag}\n\n{body}\n\n{end_tag}{tail}'
+              with open('README.md', 'w') as f:
+                  f.write(new_readme)
+          else:
+              print('Fehler: Platzhalter-Tags wurden in der README nicht gefunden!')
+          "
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add README.md
+          git commit -m 'docs: sync roadmap from issue #${{ github.event.issue.number }}' || exit 0
+          git push
