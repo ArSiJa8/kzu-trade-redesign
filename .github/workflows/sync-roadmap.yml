@@ -1,0 +1,68 @@
+name: Sync Issue to README
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  sync:
+    if: github.event.issue.number == 3
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Issue Body
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue view 3 --json body --jq .body > issue_body.md
+
+      - name: Update README
+        run: |
+          python -c "
+          import os
+
+          # 1. README einlesen
+          if not os.path.exists('README.md'):
+              print('Fehler: README.md existiert nicht!')
+              exit(1)
+
+          with open('README.md', 'r', encoding='utf-8') as f:
+              readme = f.read()
+
+          # 2. Inhalt aus dem Issue einlesen
+          if not os.path.exists('issue_body.md'):
+              print('Fehler: issue_body.md wurde nicht erstellt!')
+              exit(1)
+
+          with open('issue_body.md', 'r', encoding='utf-8') as f:
+              body = f.read()
+
+          # 3. Platzhalter-Tags definieren
+          start_tag = '<!-- ROADMAP:START -->'
+          end_tag = '<!-- ROADMAP:END -->'
+
+          # 4. README aktualisieren
+          if start_tag in readme and end_tag in readme:
+              head = readme.split(start_tag)[0]
+              tail = readme.split(end_tag)[1]
+              
+              new_readme = head + start_tag + '\n\n' + body + '\n\n' + end_tag + tail
+              
+              with open('README.md', 'w', encoding='utf-8') as f:
+                  f.write(new_readme)
+              print('README erfolgreich mit Issue #3 synchronisiert!')
+          else:
+              print('Fehler: Die HTML-Kommentare <!-- ROADMAP:START --> und <!-- ROADMAP:END --> fehlen in der README.md!')
+              exit(1)
+          "
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add README.md
+          git commit -m 'docs: sync roadmap from issue #3' || exit 0
+          git push
